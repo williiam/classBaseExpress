@@ -4,10 +4,12 @@
  * @author Faiz A. Farooqui <faiz@geekyants.com>
  */
 
-import Locals from '../../providers/Locals';
+import { NextFunction, RequestHandler } from 'express';
+import { IRequest, IResponse } from '../../interface/vendors';
+import Locals from '../../provider/Local';
 
 class Home {
-	public static index(req, res, next): any {
+	public static index: RequestHandler<IRequest,Partial<IResponse>> = (req, res, next) => {
 		return res.json({
 			message: Locals.config().name
 		});

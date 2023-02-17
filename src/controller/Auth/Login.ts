@@ -1,57 +1,33 @@
-/**
- * Handles your login routes
- *
- * @author Faiz A. Farooqui <faiz@geekyants.com>
- */
-
-import * as passport from 'passport';
-
+import { RequestHandler } from 'express';
+import { check, validationResult } from 'express-validator';
 import {
 	IRequest, IResponse, INext
 } from '../../interface/vendors';
 import Log from '../../provider/Log';
 
 class Login {
-	public static show (req: IRequest, res: IResponse): any {
+	public static show: RequestHandler<IRequest,Partial<IResponse>> = (req, res) => {
 		return res.render('pages/login', {
 			title: 'LogIn'
 		});
 	}
 
 	public static perform (req: IRequest, res: IResponse, next: INext): any {
-		req.assert('email', 'E-mail cannot be blank').notEmpty();
-		req.assert('email', 'E-mail is not valid').isEmail();
-		req.assert('password', 'Password cannot be blank').notEmpty();
-		req.assert('password', 'Password length must be atleast 8 characters').isLength({ min: 8 });
-		req.sanitize('email').normalizeEmail({ gmail_remove_dots: false });
+		check('email', 'E-mail cannot be blank').notEmpty();
+		check('email', 'E-mail is not valid').isEmail();
+		check('password', 'Password cannot be blank').notEmpty();
+		check('password', 'Password length must be atleast 8 characters').isLength({ min: 8 });
+		check('confirmPassword', 'Confirmation Password cannot be blank').notEmpty();
+		check('confirmPassword', 'Password & Confirmation password does not match').equals(req.body.password);
+		// sanitize body
 
-		const errors = req.validationErrors();
-		if (errors) {
-			req.flash('errors', errors);
-			return res.redirect('/login');
+		const result = validationResult(req);
+		if (!result.isEmpty()) {
+		  return res.status(400).json({ errors: result.array() });
 		}
 
-		Log.info('Here in the login controller #1!');
-		passport.authenticate('local', (err, user, info) => {
-			Log.info('Here in the login controller #2!');
-			if (err) {
-				return next(err);
-			}
-
-			if (! user) {
-				req.flash('errors', info);
-				return res.redirect('/login');
-			}
-
-			req.logIn(user, (err) => {
-				if (err) {
-					return next(err);
-				}
-
-				req.flash('success', { msg: 'You are successfully logged in now!' });
-				res.redirect('/account');
-			});
-		})(req, res, next);
+		const { email, password } = req.body;
+		console.log({email, password});
 	}
 }
 
