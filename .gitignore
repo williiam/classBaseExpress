@@ -9,3 +9,5 @@ public/static
 dist/
 q.md
 logs
+.env
+.env/
