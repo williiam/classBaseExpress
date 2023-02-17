@@ -5,7 +5,7 @@
  */
 
 import { Application } from 'express';
-import Locals from './Locals';
+import Locals from './Local';
 import Log from './Log';
 
 import webRouter from './../routes/Web';

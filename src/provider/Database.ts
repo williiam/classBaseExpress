@@ -5,7 +5,7 @@
  */
 
 
-import Locals from './Locals';
+import Locals from './Local';
 import Log from './Log';
 
 export class Database {
@@ -29,4 +29,4 @@ export class Database {
 	}
 }
 
-export default mongoose;
+// export default Database;
