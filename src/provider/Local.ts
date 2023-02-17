@@ -44,6 +44,12 @@ class Locals {
 		const redisPrefix = process.env.REDIS_QUEUE_DB || 'q';
 		const redisDB = process.env.REDIS_QUEUE_PREFIX || 3;
 
+		const postgresUser = process.env.POSTGRES_USER
+		const postgresHost = process.env.POSTGRES_HOST
+		const postgresDatabase = process.env.POSTGRES_DATABASE
+		const postgresPassword = process.env.POSTGRES_PASSWORD
+		const postgresPort = process.env.POSTGRES_PORT
+
 		return {
 			appSecret,
 			apiPrefix,
@@ -65,7 +71,12 @@ class Locals {
 			redisPrefix,
 			url,
 			queueMonitor,
-			queueMonitorHttpPort
+			queueMonitorHttpPort,
+			postgresUser,
+			postgresHost,
+			postgresDatabase,
+			postgresPassword,
+			postgresPort,
 		};
 	}
 

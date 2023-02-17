@@ -4,7 +4,7 @@
  * @author Faiz A. Farooqui <faiz@geekyants.com>
  */
 
-import { IRequest, IResponse } from '../../interface/vendors';
+import { IRequest, IResponse } from '../../../interface/vendors';
 
 class Logout {
 	public static perform (req: IRequest, res: IResponse): any {

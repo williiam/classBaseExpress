@@ -12,7 +12,7 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 4040 5550
+EXPOSE 4040 8080
 
 #Build to project
 RUN npm run build

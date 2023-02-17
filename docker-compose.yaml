@@ -1,33 +1,28 @@
 version: '3'
 services:
-    express-typescript:
-        build:
+    server:
+        container_name: cnw-api-version-dev
+        restart: unless-stopped
+        build: 
             context: .
-            dockerfile: local.Dockerfile
-        container_name: 'app-express-typescript'
+            dockerfile: dockerfile
+        args:
+            - PORT = 8080
+        network_mode: bridge
+        ports:
+        - 8080:8080
+        env_file:
+        - .env
         volumes:
-            - .:/usr/src/app/
-        working_dir: /usr/src/app
+        - ./logs:/root/.pm2/logs:Z
+        # - ./logs:/home/.pm2/logs:Z
+        # - /Users/william/WORKSPACE/course-nccu-backend-2/logs:/usr/src/app/logs:Z
+        - ./logs:/usr/src/logs:Z
+    db:
+        image: postgres
         environment:
-            - REDIS_QUEUE_HOST=redis
-            - MONGOOSE_URL=mongodb://mongo:27017/typescript_mongoose
-            - GOOGLE_ID=
-            - GOOGLE_SECRET=
-            - TWITTER_KEY=
-            - TWITTER_SECRET=
-        command: sh -c "npm install && npm run dev"
-        ports:
-            - 4040:4040
-            - 5550:5550
-    redis:
-        image: "redis"
-        ports:
-        - "6379:6379"
-        expose:
-        - 6379
-    mongo:
-        image: "mongo"
-        ports:
-        - "27017:27017"
-        expose:
-        - 27017
+        POSTGRES_USER: your_postgres_username
+        POSTGRES_PASSWORD: your_postgres_password
+        POSTGRES_DB: your_database_name
+        volumes:
+        - ./data:/var/lib/postgresql/data

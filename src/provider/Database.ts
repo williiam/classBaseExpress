@@ -1,32 +1,30 @@
-/**
- * Define Database connection
- *
- * @author Faiz A. Farooqui <faiz@geekyants.com>
- */
+import { Pool } from "pg";
 
-
-import Locals from './Local';
-import Log from './Log';
+import Locals from "./Local";
+import Log from "./Log";
 
 export class Database {
-	// Initialize your database pool
-	public static init (): any {
-		// const dsn = Locals.config().mongooseUrl;
-		// const options = { useNewUrlParser: true, useUnifiedTopology: true };
+  public static pool: any;
 
-		// (<any>mongoose).Promise = bluebird;
+  // Initialize your database pool
+  public static init(): any {
+    const {
+      postgresUser,
+      postgresHost,
+      postgresDatabase,
+      postgresPassword,
+      postgresPort,
+    } = Locals.config();
 
-		// mongoose.connect(dsn, options, (error: MongoError) => {
-		// 	// handle the error case
-		// 	if (error) {
-		// 		Log.info('Failed to connect to the Mongo server!!');
-		// 		console.log(error);
-		// 		throw error;
-		// 	} else {
-		// 		Log.info('connected to mongo server at: ' + dsn);
-		// 	}
-		// });
-	}
+    const pool = new Pool({
+      user: postgresUser,
+      host: postgresHost,
+      database: postgresDatabase,
+      password: postgresPassword,
+      port: postgresPort,
+    });
+    this.pool = pool;
+  }
 }
 
 // export default Database;

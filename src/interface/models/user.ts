@@ -11,25 +11,12 @@ export interface Tokens {
 }
 
 export interface IUser {
+	id: number;
+	name: string;
 	email: string;
 	password: string;
-	passwordResetToken: string;
-	passwordResetExpires: Date;
-
-	facebook: string;
-	twitter: string;
-	google: string;
-	github: string;
-	instagram: string;
-	linkedin: string;
-	tokens: Tokens[];
-	steam: string;
-
-	fullname: string;
-	gender: string;
-	geolocation: string;
-	website: string;
-	picture: string;
+	created_at: Date;
+  
 }
 
 export default IUser;

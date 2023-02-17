@@ -34,17 +34,15 @@ const cleanupDatabase = () => {
   // return User.create(userData);
 };
 
-let app: Express.Application;
-
-beforeAll(async () => {
-    app = App.getExpressApp();
-});
-afterAll(async () => {
-    // kill the app
-    await App.close();
-});
-
 describe("Registration endpoint", () => {
+  let app: Express.Application;
+
+  beforeAll(async () => {
+    app = App.getExpressApp();
+  });
+  afterAll(async () => {
+    // kill the app
+  });
   afterEach(async () => {
     await cleanupDatabase(); // clean up the database after each test
   });
@@ -73,7 +71,10 @@ describe("Registration endpoint", () => {
   });
 
   it("should return an error if the confirmPassword is different from password", async () => {
-    const userData = generateFakeUserData({ password:"123", confirmPassword: "456"}); 
+    const userData = generateFakeUserData({
+      password: "123",
+      confirmPassword: "456",
+    });
     const response = await request(app).post("/register").send(userData);
 
     expect(response.status).toBe(400);
