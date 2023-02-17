@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 import Express from "./Express";
 import { Database } from "./Database";
-import Logger from "./Logger";
+import Logger from "./Log";
 
 class App {
   // Loads your dotenv file
@@ -22,7 +22,7 @@ class App {
 
   // Loads the Database Pool
   public loadDatabase(): void {
-    Log.info("Database :: Booting @ Master...");
+    Logger.info("Database :: Booting @ Master...");
 
     Database.init();
   }
