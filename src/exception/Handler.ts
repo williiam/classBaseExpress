@@ -4,14 +4,16 @@
  * @author Faiz A. Farooqui <faiz@geekyants.com>
  */
 
+import { Application, NextFunction } from 'express';
+import { IRequest, IResponse } from '../interface/vendors';
 import Log from '../provider/Log';
-import Locals from '../providers/Locals';
+import Locals from '../provider/Local';
 
 class Handler {
 	/**
 	 * Handles all the not found routes
 	 */
-	public static notFoundHandler(_express): any {
+	public static notFoundHandler(_express: Application): any {
 		const apiPrefix = Locals.config().apiPrefix;
 
 		_express.use('*', (req, res) => {
@@ -37,7 +39,16 @@ class Handler {
 	/**
 	 * Handles your api/web routes errors/exception
 	 */
-	public static clientErrorHandler(err, req, res, next): any {
+	// public static clientErrorHandler(err: Error, req: IRequest, res: IResponse, next: NextFunction): any {
+	// 	Log.error(err.stack);
+
+	// 	if (req.xhr) {
+	// 		return res.status(500).send({error: 'Something went wrong!'});
+	// 	} else {
+	// 		return next(err);
+	// 	}
+	// }
+	public static clientErrorHandler(err: any, req: any, res: any, next: any): any {
 		Log.error(err.stack);
 
 		if (req.xhr) {
@@ -50,7 +61,7 @@ class Handler {
 	/**
 	 * Show undermaintenance page incase of errors
 	 */
-	public static errorHandler(err, req, res, next): any {
+	public static errorHandler(err: Error & { inner: {message: string} }, req: any, res: any, next: any): any {
 		Log.error(err.stack);
 		res.status(500);
 
@@ -79,7 +90,7 @@ class Handler {
 	 * Register your error / exception monitoring
 	 * tools right here ie. before "next(err)"!
 	 */
-	public static logErrors(err, req, res, next): any {
+	public static logErrors(err: { stack: any; }, req: any, res: any, next: (arg0: any) => any): any {
 		Log.error(err.stack);
 
 		return next(err);
