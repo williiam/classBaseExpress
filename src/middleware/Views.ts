@@ -9,13 +9,15 @@ import { Application } from 'express';
 
 import Log from '../provider/Log';
 
+// FIXME path not 
 class Views {
 	public static mount(_express: Application): Application {
 		Log.info('Booting the \'Views\' middleware...');
 
 		_express.set('view engine', 'pug');
 		_express.set('view options', { pretty: true });
-		_express.set('views', path.join(__dirname, '../../views'));
+		_express.set('views', path.join(__dirname, '../views'));
+		console.log( path.join(__dirname, '../views'))
 		_express.locals.pretty = true;
 
 		return _express;

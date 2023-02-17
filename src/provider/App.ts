@@ -26,6 +26,11 @@ class App {
 
     Database.init();
   }
+
+  // get the express app instance for testing
+  public getExpressApp(): any {
+    return Express.express;
+  }
 }
 
 export default new App();

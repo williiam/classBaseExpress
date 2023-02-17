@@ -5,10 +5,10 @@
  */
 
 import { Application } from 'express';
-import * as expressStatusMonitor from 'express-status-monitor';
+import expressStatusMonitor from 'express-status-monitor';
 
 import Log from '../provider/Log';
-import Locals from '../providers/Locals';
+import Locals from '../provider/Local';
 
 class StatusMonitor {
 	public mount (_express: Application): Application {

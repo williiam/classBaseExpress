@@ -21,7 +21,7 @@ class Locals {
 		const appSecret = process.env.APP_SECRET || 'This is your responsibility!';
 		const mongooseUrl = process.env.MONGOOSE_URL;
 		const maxUploadLimit = process.env.APP_MAX_UPLOAD_LIMIT || '50mb';
-		const maxParameterLimit = process.env.APP_MAX_PARAMETER_LIMIT || '50mb';
+		const maxParameterLimit = process.env.APP_MAX_PARAMETER_LIMIT || 50;
 
 		const name = process.env.APP_NAME || 'NodeTS Dashboard';
 		const keywords = process.env.APP_KEYWORDS || 'somethings';

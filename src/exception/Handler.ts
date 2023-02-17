@@ -14,24 +14,24 @@ class Handler {
 	 * Handles all the not found routes
 	 */
 	public static notFoundHandler(_express: Application): any {
-		const apiPrefix = Locals.config().apiPrefix;
+		// const apiPrefix = Locals.config().apiPrefix;
 
-		_express.use('*', (req, res) => {
-			const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+		// _express.use('*', (req, res) => {
+		// 	const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
-			Log.error(`Path '${req.originalUrl}' not found [IP: '${ip}']!`);
-			if (req.xhr || req.originalUrl.includes(`/${apiPrefix}/`)) {
-				return res.json({
-					error: 'Page Not Found'
-				});
-			} else {
-				res.status(404);
-				return res.render('pages/error', {
-					title: 'Page Not Found',
-					error: []
-				});
-			}
-		});
+		// 	Log.error(`Path '${req.originalUrl}' not found [IP: '${ip}']!`);
+		// 	if (req.xhr || req.originalUrl.includes(`/${apiPrefix}/`)) {
+		// 		return res.json({
+		// 			error: 'Page Not Found'
+		// 		});
+		// 	} else {
+		// 		res.status(404);
+		// 		return res.render('/pages/error', {
+		// 			title: 'Page Not Found',
+		// 			error: []
+		// 		});
+		// 	}
+		// });
 
 		return _express;
 	}

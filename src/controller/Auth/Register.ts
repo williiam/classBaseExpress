@@ -5,11 +5,17 @@ import { IRequest, IResponse } from '../../interface/vendors';
 class Register {
 
 	public static show: RequestHandler<IRequest,Partial<IResponse>> = (req, res) => {
+		// return res.render('pages/signup', {
+		// 	title: 'SignUp',
+		// 	messages: {}
+		// });
 		return res.render('pages/signup', {
-			title: 'SignUp'
+			title: 'SignUp',
+			messages: {}
 		});
 	}
 
+	// TODO: register user
 	public static perform: RequestHandler<IRequest,Partial<IResponse>> =  (req, res) => {
 		check('email', 'E-mail cannot be blank').notEmpty();
 		check('email', 'E-mail is not valid').isEmail();

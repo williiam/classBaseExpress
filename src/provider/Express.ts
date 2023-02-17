@@ -9,7 +9,7 @@ import cors from "cors";
 
 import Locals from "./Local";
 import Routes from "./Routes";
-import Bootstrap from '../middleware/Kernel';
+import Bootstrap from "../middleware/Kernel";
 import ExceptionHandler from "../exception/Handler";
 
 class Express {
@@ -25,6 +25,7 @@ class Express {
     this.express = express();
 
     this.mountDotEnv();
+    this.mountMiddlewares();
     this.mountRoutes();
   }
 
@@ -32,12 +33,12 @@ class Express {
     this.express = Locals.init(this.express);
   }
 
-  	/**
-	 * Mounts all the defined middlewares
-	 */
-	private mountMiddlewares (): void {
-		this.express = Bootstrap.init(this.express);
-	}
+  /**
+   * Mounts all the defined middlewares
+   */
+  private mountMiddlewares(): void {
+    this.express = Bootstrap.init(this.express);
+  }
 
   /**
    * Mounts all the defined routes
@@ -53,7 +54,7 @@ class Express {
   public init(): any {
     const port: number = Locals.config().port;
 
-	// cors
+    // cors
     if (Locals.config().isCORSEnabled) {
       const corsOptions = {
         origin: ["http://localhost:3000"],
