@@ -8,3 +8,4 @@ public/static
 .logs/*.log
 dist/
 q.md
+logs
