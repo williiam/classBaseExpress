@@ -3,6 +3,7 @@ import { check, validationResult } from "express-validator";
 import { IRequest, IResponse } from "../../../interface/vendors";
 import { IUser } from "../../../interface/models";
 import { Database } from "../../../provider/Database";
+import { hash } from "../../../util"
 
 class Register {
   public static show: RequestHandler<IRequest, Partial<IResponse>> = (
@@ -41,9 +42,12 @@ class Register {
     }
 
     const { email, password } = req.body;
+
+    const passwordHash = await hash(password);
 	
     const insertResult = await this.createNewUser({
-      email, password,
+      email, 
+      password_hash: passwordHash,
       id: 0,
       name: "",
       created_at: new Date(),
@@ -69,7 +73,7 @@ class Register {
       const now = new Date();
       const query = {
         text: "INSERT INTO users(email, password, created_at) VALUES($1, $2, $3)",
-        values: [user.email, user.password, now],
+        values: [user.email, user.password_hash, now],
       };
       return await Database.pool.query(query);
     } catch (error) {

@@ -14,7 +14,7 @@ export interface IUser {
 	id: number;
 	name: string;
 	email: string;
-	password: string;
+	password_hash: string;
 	created_at: Date;
   
 }

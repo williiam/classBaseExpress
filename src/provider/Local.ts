@@ -50,6 +50,8 @@ class Locals {
 		const postgresPassword = process.env.POSTGRES_PASSWORD
 		const postgresPort = process.env.POSTGRES_PORT
 
+		const saltRounds = process.env.SALT_ROUNDS
+
 		return {
 			appSecret,
 			apiPrefix,
@@ -77,6 +79,7 @@ class Locals {
 			postgresDatabase,
 			postgresPassword,
 			postgresPort,
+			saltRounds
 		};
 	}
 
