@@ -59,7 +59,7 @@ describe("image new endpoint", () => {
       .post("/api/image/new")
       .field('isPrivate', newImageData.isPrivate)
       .set("cookie", cookie)
-      .attach("name", file, "test.png")
+      .attach("file", file, "test.png")
 
     expect(response.status).toBe(200);
     // expect(response.body.message).toBe("Image uploaded successfully");

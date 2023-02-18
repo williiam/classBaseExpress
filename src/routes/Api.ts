@@ -17,6 +17,7 @@ const upload = multer({
   dest: "uploads/",
   limits: {
     fileSize: 1024 * 1024 * 10,
+    fields:2
   },
   fileFilter(req, file, cb) {
     // 只接受三種圖片格式
@@ -25,6 +26,7 @@ const upload = multer({
     }
     cb(null, true);
   },
+  field: "file",
 });
 
 const router = Router();

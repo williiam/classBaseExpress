@@ -5,4 +5,5 @@ export interface IResponse extends Response {
     errors?: Array<any>;
     message?: string;
     accessToken?: string;
+    data?: any;
 }
