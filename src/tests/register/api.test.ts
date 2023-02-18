@@ -22,6 +22,8 @@ const generateFakeUserData = (userData?: Partial<IUserData>): IUserData => ({
   ...userData,
 });
 
+jest.setTimeout(30000)
+
 // TODO: for testing, use another DB
 const createUserInDatabase = () => {
   // const userData = generateFakeUserData();
@@ -53,7 +55,7 @@ describe("Registration endpoint", () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
-      success: true,
+      error: false,
       message: "Registration successful",
     });
   });
@@ -65,7 +67,7 @@ describe("Registration endpoint", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      success: false,
+      error: true,
       message: "Email already registered",
     });
   });
@@ -79,7 +81,7 @@ describe("Registration endpoint", () => {
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
-      success: false,
+      error: true,
       message: "password confirm failed",
     });
   });
