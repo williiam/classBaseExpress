@@ -26,7 +26,6 @@ const upload = multer({
     }
     cb(null, true);
   },
-  field: "file",
 });
 
 const router = Router();
@@ -43,8 +42,8 @@ router.post(
   upload.single("file"),
   ImageController.new
 );
-// router.post('/image/delete', HomeController.index);
-// router.post('/image/list', HomeController.index);
-// router.post('/image/update', HomeController.index);
+router.post('/image/delete', ImageController.delete);
+router.post('/image/list', ImageController.getList);
+router.post('/image/update', ImageController.update);
 
 export default router;

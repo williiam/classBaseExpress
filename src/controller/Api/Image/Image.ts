@@ -30,7 +30,7 @@ class Image {
       const { user, file, body } = req;
       const { name, isPrivate } = body;
 
-      // TODO: 存圖片 1.aws 2.local
+      // V1 存local TODO: access control
 
       // 存圖片metadata
       const insertResult = await Database.pool.query(
