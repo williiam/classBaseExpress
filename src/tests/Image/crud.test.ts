@@ -1,8 +1,7 @@
 import request from "supertest";
-import axios from "axios";
 import App from "../../index";
 import jwt_decode from "jwt-decode";
-import _cookie from 'cookie';
+import _cookie from "cookie";
 
 import {
   generateFakeUserData,
@@ -19,6 +18,7 @@ let userData = generateFakeUserData({
 }); // generate fake user data
 
 let cookie = "";
+let imageId = "";
 
 describe("image new endpoint", () => {
   let app: Express.Application;
@@ -26,7 +26,9 @@ describe("image new endpoint", () => {
   beforeAll(async () => {
     app = App.getExpressApp();
     const cleanupBeforeResult = await cleanupDatabase(userData);
-    const response = await request(app).post("/api/auth/register").send(userData);
+    const response = await request(app)
+      .post("/api/auth/register")
+      .send(userData);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       error: false,
@@ -57,14 +59,32 @@ describe("image new endpoint", () => {
     };
     const response = await request(app)
       .post("/api/image/new")
-      .field('isPrivate', newImageData.isPrivate)
+      .field("isPrivate", newImageData.isPrivate)
       .set("cookie", cookie)
-      .attach("file", file, "test.png")
+      .attach("file", file, "test.png");
 
     expect(response.status).toBe(200);
     // expect(response.body.message).toBe("Image uploaded successfully");
+    expect(response.body).toMatchObject({
+      error: false,
+      message: "Image uploaded successfully",
+      image: expect.any(Object),
+    });
+    imageId = response.body.image;
   });
-  it("should delete a image for a user", async () => {});
+  it("should delete a image for a user", async () => {
+    // delete the image in test 1 ,
+    // TODO: make it depends on test1
+    const response = await request(app)
+      .delete("/api/image/delete")
+      .set("cookie", cookie)
+      .send({
+        imageId,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Image deleted successfully");
+  });
   it("should set a image to private", async () => {});
   it("should set a image to public", async () => {});
 });

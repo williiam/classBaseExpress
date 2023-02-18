@@ -143,6 +143,40 @@ class Image {
       throw err;
     }
   };
+
+  // get image by id <- need private protection
+  public static get: RequestHandler<IRequest, Partial<IResponse>> = async (
+    req,
+    res
+  ) => {
+    try {
+      check("id", "Password cannot be blank").notEmpty();
+      const result = validationResult(req);
+      if (!result.isEmpty()) {
+        return res.status(400).json({ errors: result.array() });
+      }
+
+      // @ts-ignore
+      const { user, body } = req;
+      const { id } = body;
+
+      const selectResult = await Database.pool.query(
+        "SELECT id, name, is_private, path, created_at FROM images WHERE id = $1 AND user_id = $2",
+        [id, user.id]
+      );
+
+      if (selectResult.rowCount === 1) {
+        return res.status(200).json({
+          error: false,
+          message: "Image",
+          data: selectResult.rows[0],
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
 }
 
 export default Image;

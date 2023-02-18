@@ -42,8 +42,9 @@ router.post(
   upload.single("file"),
   ImageController.new
 );
-router.post('/image/delete', ImageController.delete);
-router.post('/image/list', ImageController.getList);
+router.delete('/image/delete', ImageController.delete);
 router.post('/image/update', ImageController.update);
+
+router.get('/image/list', ImageController.getList);
 
 export default router;
