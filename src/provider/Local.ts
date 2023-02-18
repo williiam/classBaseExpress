@@ -59,6 +59,8 @@ class Locals {
       ? (parseInt(process.env.JWT_USER_SALT_ROUNDS) as number)
       : 10;
 
+	
+
     return {
       appSecret,
       apiPrefix,
@@ -87,6 +89,7 @@ class Locals {
       postgresPassword,
       postgresPort,
       saltRounds,
+	  jwtUserSaltRounds
     };
   }
 
