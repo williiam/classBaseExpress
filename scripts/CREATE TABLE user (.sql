@@ -1,7 +1,7 @@
 CREATE TABLE user (
   id SERIAL PRIMARY KEY,
   email TEXT NOT NULL,
-  password_hash TEXT NOT NULL,
+  password TEXT NOT NULL,
   name TEXT NOT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
@@ -16,7 +16,7 @@ CREATE OR REPLACE FUNCTION compare_password(user_email TEXT, plain_password TEXT
   DECLARE
     hashed_password TEXT;
   BEGIN
-    SELECT password_hash FROM "user" WHERE email = user_email INTO hashed_password;
+    SELECT password FROM "user" WHERE email = user_email INTO hashed_password;
     RETURN hashed_password = crypt(plain_password, hashed_password);
   END;
 $$ LANGUAGE plpgsql;
