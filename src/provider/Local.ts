@@ -50,7 +50,7 @@ class Locals {
 		const postgresPassword = process.env.POSTGRES_PASSWORD
 		const postgresPort = process.env.POSTGRES_PORT
 
-		const saltRounds = process.env.SALT_ROUNDS
+		const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
 
 		return {
 			appSecret,
