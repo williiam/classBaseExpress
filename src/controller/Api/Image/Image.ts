@@ -4,21 +4,8 @@ import { IRequest, IResponse } from "../../../interface/vendors";
 import { Database } from "../../../provider/Database";
 
 class Image {
-  public static show: RequestHandler<IRequest, Partial<IResponse>> = (
-    req,
-    res
-  ) => {
-    // return res.render('pages/signup', {
-    // 	title: 'SignUp',
-    // 	messages: {}
-    // });
-    return res.render("pages/signup", {
-      title: "SignUp",
-      messages: {},
-    });
-  };
 
-  public static perform: RequestHandler<IRequest, Partial<IResponse>> = async (
+  public static new: RequestHandler<IRequest, Partial<IResponse>> = async (
     req,
     res
   ) => {

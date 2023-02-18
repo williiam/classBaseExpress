@@ -38,6 +38,9 @@ class Http {
 		// Enables the request flash messages
 		_express.use(flash());
 
+		// Enables the request flash messages
+		_express.use(flash());
+
 		/**
 		 * Enables the session store
 		 *
