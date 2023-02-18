@@ -16,8 +16,8 @@ router.get('/', HomeController.index);
 router.get('/signup', RegisterController.show);
 router.post('/signup',RegisterController.perform);
 
-// router.get('/login', LoginController.show);
-// router.post('/login', LoginController.perform);
+router.get('/login', LoginController.show);
+router.post('/login', LoginController.perform);
 
 // router.get('/logout', LogoutController.perform);
 
