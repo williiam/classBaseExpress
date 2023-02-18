@@ -27,7 +27,7 @@ describe("Registration endpoint", () => {
     }); // generate fake user data
     const cleanupBeforeResult = await cleanupDatabase(userData);
     console.log(cleanupBeforeResult)
-    const response = await request(app).post("/signup").send(userData);
+    const response = await request(app).post("/api/auth/register").send(userData);
 
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
@@ -47,7 +47,7 @@ describe("Registration endpoint", () => {
     });
     const cleanupResultBefore = await cleanupDatabase(fakeUser);
     const createResult = await createUserInDatabase(fakeUser);
-    const response = await request(app).post("/signup").send(fakeUser);
+    const response = await request(app).post("/api/auth/register").send(fakeUser);
     expect(response.status).toBe(400);
     // expect(response.body).toMatchObject({
     //   error: true,
@@ -63,7 +63,7 @@ describe("Registration endpoint", () => {
       password: "123",
       confirmPassword: "123",
     });
-    const response = await request(app).post("/signup").send(userData);
+    const response = await request(app).post("/api/auth/register").send(userData);
 
     expect(response.status).toBe(400);
     // expect(response.body).toMatchObject({
@@ -77,7 +77,7 @@ describe("Registration endpoint", () => {
       password: "12345678",
       confirmPassword: "87654321",
     });
-    const response = await request(app).post("/signup").send(userData);
+    const response = await request(app).post("/api/auth/register").send(userData);
 
     expect(response.status).toBe(400);
     // expect(response.body).toMatchObject({

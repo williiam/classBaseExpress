@@ -20,7 +20,7 @@ describe("Login endpoint", () => {
     const fakeUser = generateFakeUserData({ email: "fake@gmail.com",password:"password" });
     const cleanUpResult = await cleanupDatabase(fakeUser);
     const createResult = await createUserInDatabase(fakeUser);
-    const response = await request(app).post("/login").send(fakeUser);
+    const response = await request(app).post("/api/auth/login").send(fakeUser);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       error: false,
@@ -38,7 +38,7 @@ describe("Login endpoint", () => {
     });
     const userData = await generateFakeUserData(fakeUser);
     const response = await request(app)
-      .post("/login")
+      .post("/api/auth/login")
       .send({ ...userData, password: "incorrectPwd" });
 
     expect(response.status).toBe(400);
