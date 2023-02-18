@@ -5,6 +5,9 @@ import {
 } from '../../../interface/vendors';
 import Log from '../../../provider/Log';
 import { Database } from '../../../provider/Database';
+import { IUser } from '../../../interface/models';
+import { hash,compare } from "../../../util";
+
 class Login {
 	public static show: RequestHandler<IRequest,Partial<IResponse>> = (req, res) => {
 		return res.render('pages/login', {
@@ -27,11 +30,38 @@ class Login {
 		const { email, password } = req.body;
 		console.log({email, password});
 		
-		// call db function to check user exist and password match
-		// Database.pool.
+		// check user exist and password match
+		const query = `SELECT * FROM users WHERE email = $1`;
+		const values = [email];
+
+
+			
 
 
 	}
+
+	private checkCredentials = async (email: string, password: string): Promise<boolean> => {
+		try {
+		  // Get the user with the given email from the database
+		  const result = await Database.pool.query('SELECT email, password_hash FROM users WHERE email = $1', [email]);
+		  const user: IUser = result.rows[0];
+	  
+		  if (user) {
+
+			const passwordHash = await hash(password);
+			// Compare the input password to the hashed password in the database
+			const passwordMatches = await compare(passwordHash, user.password_hash);
+			return passwordMatches;
+		  } else {
+			return false;
+		  }
+		} catch (error) {
+		  console.error('Error checking credentials:', error);
+		  return false;
+		} finally {
+		  pool.end();
+		}
+	  }
 
 	// check jwt middleware
 	public static checkJwt (req: IRequest, res: IResponse, next: INext): any {
