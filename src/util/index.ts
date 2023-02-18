@@ -1,5 +1,5 @@
 // /**
 //  * @author William
 //  */
-import { hash } from './crypt';
-export { hash };
+import { hash, compare } from './crypt';
+export { hash, compare };

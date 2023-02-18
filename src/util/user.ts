@@ -1,12 +1,21 @@
 import jwt from 'jsonwebtoken';
 import { User,CammelCaseUser,UnderscoreCaseUser } from "../interface/models";
 import Locals from "../provider/Local";
-
+import bcrypt from "bcrypt";
 
 export class UserUtil {
+
+  // TODO: payload 格式
+  /*
+    {
+        id,
+        email
+    }
+  */
   public static async generateJwt(payload: any) {
     const saltRounds = Locals.config().jwtUserSaltRounds;
-    const token = await jwt.sign(payload, saltRounds, {
+    const salt = await bcrypt.genSalt(saltRounds);
+    const token = jwt.sign(payload, salt, {
       expiresIn: "1d",
     });
     return token;
@@ -18,7 +27,6 @@ export class UserUtil {
       name: user.name,
       email: user.email,
       password: user.password,
-      passwordHash: user.password_hash || user.passwordHash,
       createdAt: user.created_at || user.createdAt,
     };
   }
@@ -31,7 +39,6 @@ export class UserUtil {
       name: user.name,
       email: user.email,
       password: user.password,
-      password_hash: user.password_hash || user.passwordHash,
       created_at: user.created_at || user.createdAt,
     };
   }
