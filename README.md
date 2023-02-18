@@ -56,3 +56,6 @@ generate the postgres table by the below schema , including some usful feature m
             is_private
             created_at
             updated_at
+
+
+TODO: merge Login and Register into one controller
