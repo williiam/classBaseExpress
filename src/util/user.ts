@@ -13,9 +13,8 @@ export class UserUtil {
     }
   */
   public static async generateJwt(payload: any) {
-    const saltRounds = Locals.config().jwtUserSaltRounds;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const token = jwt.sign(payload, salt, {
+    const jwtSalt = Locals.config().jwtSalt;
+    const token = jwt.sign(payload, jwtSalt, {
       expiresIn: "1d",
     });
     return token;
