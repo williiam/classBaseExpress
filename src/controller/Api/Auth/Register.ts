@@ -4,7 +4,7 @@ import { IRequest, IResponse } from "../../../interface/vendors";
 import { User } from "../../../interface/models";
 import { Database } from "../../../provider/Database";
 import { hash } from "../../../util";
-import { UserUtil } from "../../../interface/models/user";
+import { UserUtil } from "../../../util/user";
 
 class Register {
   public static show: RequestHandler<IRequest, Partial<IResponse>> = (
@@ -21,60 +21,72 @@ class Register {
     req,
     res
   ) => {
-    check("email", "E-mail cannot be blank").notEmpty();
-    check("email", "E-mail is not valid").isEmail();
-    check("password", "Password cannot be blank").notEmpty();
-    check("password", "Password length must be atleast 8 characters").isLength({
-      min: 8,
-    });
-    check(
-      "confirmPassword",
-      "Confirmation Password cannot be blank"
-    ).notEmpty();
-    check(
-      "confirmPassword",
-      "Password & Confirmation password does not match"
-    ).equals(req.body.password);
-    // sanitize body
+    try {
+      await check("email", "E-mail cannot be blank").notEmpty().run(req);
+      await check("email", "E-mail is not valid").isEmail().run(req);
+      await check("password", "Password cannot be blank").notEmpty().run(req);
+      await check(
+        "password",
+        "Password length must be atleast 8 characters"
+      ).isLength({
+        min: 8,
+      }).run(req);
+      await check(
+        "confirmPassword",
+        "Confirmation Password cannot be blank"
+      ).notEmpty().run(req);
+      await check(
+        "confirmPassword",
+        "Password & Confirmation password does not match"
+      ).equals(req.body.password).run(req);
+      // sanitize body
 
-    const result = validationResult(req);
-    if (!result.isEmpty()) {
-      return res.status(400).json({ errors: result.array() });
-    }
+      const result = validationResult(req);
+      if (!result.isEmpty()) {
+        return res.status(400).json({ errors: result.array() });
+      }
 
-    const { email, password } = req.body;
+      const { email, password } = req.body;
 
-    const passwordHash = await hash(password);
+      const insertResult = await this.createNewUser(email, password);
 
-    const insertResult = await this.createNewUser({
-      email,
-      password_hash: passwordHash,
-      id: 0,
-      name: "",
-      created_at: new Date(),
-    });
-
-    if (insertResult.rowCount === 1) {
-      return res.status(200).json({
-        error: false,
-        message: "Registration successful",
-      });
-    } else {
-      return res.status(400).json({
-        error: true,
-        message: "Registration failed",
-      });
+      if (insertResult.rowCount === 1) {
+        const insertUser: User = insertResult.rows[0];
+        const jwt = await UserUtil.generateJwt(insertUser);
+        return res.status(200).json({
+          error: false,
+          message: "Registration successful",
+          accessToken: jwt,
+        });
+      } else {
+        return res.status(400).json({
+          error: true,
+          message: "Registration failed",
+        });
+      }
+    } catch (error: any) {
+      // duplicate key value violates unique constraint "unique_email"'
+      if (error?.code === '23505') {
+        return res.status(400).json({
+          error: true,
+          message: "Email already registered",
+        });
+      }
+      throw error;
     }
   };
 
   // TODO: store password as hash
-  private static async createNewUser(user: User): Promise<any> {
+  private static async createNewUser(
+    email: string,
+    password: string
+  ): Promise<any> {
     try {
-      const newUser = UserUtil.toUnderscoreCase(user);
+      const passwordHash = await hash(password);
       const now = new Date();
       const query = {
-        text: "INSERT INTO users(email, password_hash, created_at) VALUES($1, $2, $3)",
-        values: [user.email, user.password_hash, now],
+        text: "INSERT INTO users(email, password, created_at) VALUES($1, $2, $3) RETURNING id, email;",
+        values: [email, passwordHash, now],
       };
       const result = await Database.pool.query(query);
       return result;
@@ -87,4 +99,3 @@ class Register {
 }
 
 export default Register;
-
