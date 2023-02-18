@@ -15,48 +15,10 @@ Complete the challenege and send us the repoistory for review.
 - Try to use Docker
 - Any database of choice
 
-
-
 ## TODO
-登入or註冊成功發jwt
-DB
-    postgres開哪裡？
-        1. docker 
-        2. 本地
-        3. 遠端
-
-    schema:
-        user
-            id
-            email
-            password
-            name
-            created_at
-            updated_at
-        image
-            id
-            user_id
-            name
-            path
-            is_private
-            created_at
-            updated_at
-
 pm2
-圖片要可設成private
-
-
-generate the postgres table by the below schema , including some usful feature maybe like compare password db function or trigger that makes things easy
-
-      image
-            id
-            user_id
-            name
-            path
-            is_private
-            created_at
-            updated_at
-
+圖片要可設成private:
+可以用cloudfunction?
 
 TODO: merge Login and Register into one controller
 
