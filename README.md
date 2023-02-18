@@ -59,3 +59,8 @@ generate the postgres table by the below schema , including some usful feature m
 
 
 TODO: merge Login and Register into one controller
+
+
+s3 可以打cnw的
+
+seperate test enviroment db

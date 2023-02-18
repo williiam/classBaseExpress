@@ -74,7 +74,7 @@ class Register {
       const now = new Date();
       const query = {
         text: "INSERT INTO users(email, password_hash, created_at) VALUES($1, $2, $3)",
-        values: [newUser.email, newUser.password_hash, now],
+        values: [user.email, user.password_hash, now],
       };
       const result = await Database.pool.query(query);
       return result;

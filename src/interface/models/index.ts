@@ -4,5 +4,5 @@
 //  * Contains all your models' types definition
 //  * @author William
 //  */
-import IUser from './user';
-export { IUser };
+import User, { CammelCaseUser,UnderscoreCaseUser } from './user';
+export { User, CammelCaseUser, UnderscoreCaseUser };
