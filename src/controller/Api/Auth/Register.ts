@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { check, validationResult } from "express-validator";
 import { IRequest, IResponse } from "../../../interface/vendors";
-import { IUser } from "../../interface/models";
+import { IUser } from "../../../interface/models";
 import { Database } from "../../../provider/Database";
 
 class Register {
@@ -9,10 +9,6 @@ class Register {
     req,
     res
   ) => {
-    // return res.render('pages/signup', {
-    // 	title: 'SignUp',
-    // 	messages: {}
-    // });
     return res.render("pages/signup", {
       title: "SignUp",
       messages: {},
@@ -45,9 +41,13 @@ class Register {
     }
 
     const { email, password } = req.body;
-    console.log({ email, password });
 	
-    const insertResult = await this.createNewUser({ email, password });
+    const insertResult = await this.createNewUser({
+      email, password,
+      id: 0,
+      name: "",
+      created_at: new Date(),
+    });
 
     if (insertResult.rowCount === 1) {
       return res.status(200).json({

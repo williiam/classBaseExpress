@@ -9,7 +9,7 @@ import expressJwt from 'express-jwt';
 
 import Locals from '../provider/Local';
 
-import HomeController from '../controller/Api/Home';
+import HomeController from '../controller/Home';
 // import LoginController from '../controller/Api/Auth/Login';
 // import RegisterController from '../controller/Api/Auth/Register';
 // import RefreshTokenController from '../controller/Api/Auth/RefreshToken';
