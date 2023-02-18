@@ -12,13 +12,4 @@ const router = Router();
 
 router.get('/', HomeController.index);
 
-// TODO: validate
-router.get('/signup', RegisterController.show);
-router.post('/signup',RegisterController.perform);
-
-router.get('/login', LoginController.show);
-router.post('/login', LoginController.perform);
-
-// router.get('/logout', LogoutController.perform);
-
 export default router;

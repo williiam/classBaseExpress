@@ -51,6 +51,8 @@ class Locals {
     const postgresPassword = process.env.POSTGRES_PASSWORD;
     const postgresPort = process.env.POSTGRES_PORT;
 
+    const jwtSalt = process.env.JWT_SALT;
+
     const saltRounds = process.env.SALT_ROUNDS
       ? (parseInt(process.env.SALT_ROUNDS) as number)
       : 10;
@@ -88,8 +90,9 @@ class Locals {
       postgresDatabase,
       postgresPassword,
       postgresPort,
+      jwtSalt,
       saltRounds,
-	  jwtUserSaltRounds
+	    jwtUserSaltRounds,
     };
   }
 
