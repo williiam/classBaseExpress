@@ -57,6 +57,13 @@ class Login {
             email: selectUser.email,
           });
 
+          // Set the JWT as a cookie
+          res.cookie('user', jwt, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+            secure: true,
+            sameSite: 'none'
+          });
           return res.status(200).json({
             error: false,
             message: "Login successful",

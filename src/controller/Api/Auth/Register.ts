@@ -53,6 +53,14 @@ class Register {
       if (insertResult.rowCount === 1) {
         const insertUser: User = insertResult.rows[0];
         const jwt = await UserUtil.generateJwt(insertUser);
+        
+        // Set the JWT as a cookie
+        res.cookie('user', jwt, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000, // 1 day
+          secure: true,
+          sameSite: 'none'
+        });
         return res.status(200).json({
           error: false,
           message: "Registration successful",
