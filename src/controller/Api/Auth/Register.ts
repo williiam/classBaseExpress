@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
 import { check, validationResult } from "express-validator";
 import { IRequest, IResponse } from "../../../interface/vendors";
-import { IUser } from "../../../interface/models";
+import { User } from "../../../interface/models";
 import { Database } from "../../../provider/Database";
-import { hash } from "../../../util"
+import { hash } from "../../../util";
+import { UserUtil } from "../../../interface/models/user";
 
 class Register {
   public static show: RequestHandler<IRequest, Partial<IResponse>> = (
@@ -44,9 +45,9 @@ class Register {
     const { email, password } = req.body;
 
     const passwordHash = await hash(password);
-	
+
     const insertResult = await this.createNewUser({
-      email, 
+      email,
       password_hash: passwordHash,
       id: 0,
       name: "",
@@ -66,19 +67,19 @@ class Register {
     }
   };
 
-
   // TODO: store password as hash
-  private static async createNewUser(user: IUser): Promise<any> {
+  private static async createNewUser(user: User): Promise<any> {
     try {
+      const newUser = UserUtil.toUnderscoreCase(user);
       const now = new Date();
       const query = {
-        text: "INSERT INTO users(email, password, created_at) VALUES($1, $2, $3)",
-        values: [user.email, user.password_hash, now],
+        text: "INSERT INTO users(email, password_hash, created_at) VALUES($1, $2, $3)",
+        values: [newUser.email, newUser.password_hash, now],
       };
-      return await Database.pool.query(query);
+      const result = await Database.pool.query(query);
+      return result;
     } catch (error) {
-
-	  // TODO: DB error dont go to client 
+      // TODO: DB error dont go to client
       console.error("Error inserting user:", error);
       throw error;
     }
@@ -86,3 +87,4 @@ class Register {
 }
 
 export default Register;
+
