@@ -10,7 +10,6 @@ export type CammelCaseUser = {
   name: string;
   email: string;
   password: string;
-  passwordHash: string;
   createdAt: Date;
 };
 
@@ -19,7 +18,6 @@ export type UnderscoreCaseUser = {
   name: string;
   email: string;
   password: string;
-  password_hash: string;
   created_at: Date;
 };
 
