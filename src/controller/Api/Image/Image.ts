@@ -55,8 +55,9 @@ class Image {
     req,
     res
   ) => {
+    const client = await Database.pool.connect();
     try {
-      check("id", "Password cannot be blank").notEmpty();
+      check("imageId", "imageId cannot be blank").notEmpty();
       const result = validationResult(req);
       if (!result.isEmpty()) {
         return res.status(400).json({ errors: result.array() });
@@ -64,12 +65,20 @@ class Image {
 
       // @ts-ignore
       const { user, body } = req;
-      const { id } = body;
+      const { imageId } = body;
+
+      await client.query("BEGIN");
 
       const deleteResult = await Database.pool.query(
         "DELETE FROM images WHERE id = $1 AND user_id = $2",
-        [id, user.id]
+        [imageId, user.id]
       );
+
+      // TODO
+      // delete the actual image file
+      await client.query("DELETE FROM images WHERE id = $1", [imageId]);
+
+      await client.query("COMMIT");
 
       if (deleteResult.rowCount === 1) {
         return res.status(200).json({
@@ -78,8 +87,54 @@ class Image {
         });
       }
     } catch (err) {
+      await client.query("ROLLBACK");
       console.error(err);
       throw err;
+    } finally {
+      client.release();
+    }
+  };
+
+  public static update: RequestHandler<IRequest, Partial<IResponse>> = async (
+    req,
+    res
+  ) => {
+    const client = await Database.pool.connect();
+    try {
+      check("imageId", "imageId cannot be blank").notEmpty();
+      const result = validationResult(req);
+      if (!result.isEmpty()) {
+        return res.status(400).json({ errors: result.array() });
+      }
+
+      // @ts-ignore
+      const { user, body } = req;
+      const { imageId, isPrivate } = body;
+
+      await client.query("BEGIN");
+
+      // TODO
+      // change the actual accessibliity of the image file
+
+      const updateResult = await Database.pool.query(
+        "UPDATE images SET is_private = $1 WHERE id = $2 AND user_id = $3",
+        [isPrivate, imageId, user.id]
+      );
+
+      await client.query("COMMIT");
+
+      if (updateResult.rowCount === 1) {
+        return res.status(200).json({
+          error: false,
+          message: "Image updated",
+        });
+      }
+    } catch (err) {
+      await client.query("ROLLBACK");
+      console.error(err);
+      throw err;
+    } finally {
+      client.release();
     }
   };
 
@@ -101,43 +156,6 @@ class Image {
         message: "Image list",
         data: selectResult.rows,
       });
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
-
-  public static update: RequestHandler<IRequest, Partial<IResponse>> = async (
-    req,
-    res
-  ) => {
-    try {
-      check("id", "Password cannot be blank").notEmpty();
-      check("name", "Password cannot be blank").notEmpty();
-      check(
-        "isPrivate",
-        "Password length must be atleast 8 characters"
-      ).notEmpty();
-      const result = validationResult(req);
-      if (!result.isEmpty()) {
-        return res.status(400).json({ errors: result.array() });
-      }
-
-      // @ts-ignore
-      const { user, body } = req;
-      const { id, name, isPrivate } = body;
-
-      const updateResult = await Database.pool.query(
-        "UPDATE images SET name = $1, is_private = $2 WHERE id = $3 AND user_id = $4",
-        [name, isPrivate, id, user.id]
-      );
-
-      if (updateResult.rowCount === 1) {
-        return res.status(200).json({
-          error: false,
-          message: "Image updated",
-        });
-      }
     } catch (err) {
       console.error(err);
       throw err;
@@ -176,7 +194,7 @@ class Image {
       console.error(err);
       throw err;
     }
-  }
+  };
 }
 
 export default Image;

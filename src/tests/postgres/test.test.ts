@@ -1,25 +1,34 @@
-import { Client } from 'pg';
+import { Pool } from "pg";
 
-const config = {
-  user: 'william',
-  database: 'startech',
-  password: 'postgres',
-  host: 'localhost',
-  port: 5432,
-};
+describe("test db connected", () => {
+  let pool: Pool;
 
-const client = new Client(config);
+  beforeAll(async () => {
+    // Initialize database connection pool
+    pool = new Pool({
+      user: "william",
+      database: "startech",
+      password: "postgres",
+      host: "localhost",
+      port: 5432,
+    });
+  });
 
-async function main() {
-  try {
-    await client.connect();
-    const result = await client.query('SELECT * FROM users');
-    console.log(result.rows);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    await client.end();
-  }
-}
+  afterAll(async () => {
+    // End database connection pool
+    await pool.end();
+  });
 
-main();
+  afterEach(async () => {
+    // Clear test data from database
+    // await pool.query("DELETE FROM my_table");
+  });
+
+  it("should connect to db", async () => {
+    const result = await pool.query("SELECT NOW()");
+
+    // Check that query returned a valid result
+    expect(result.rowCount).toBe(1);
+    expect(result.rows[0]).toHaveProperty("now");
+  });
+});

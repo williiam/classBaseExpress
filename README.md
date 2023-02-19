@@ -26,3 +26,10 @@ pm2
 s3 可以打 cnw 的
 
 seperate test enviroment db
+
+TODO: 
+private and public
+DOCKER
+
+pro and dev
+    DB SPLIT

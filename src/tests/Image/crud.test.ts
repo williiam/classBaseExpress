@@ -2,6 +2,7 @@ import request from "supertest";
 import App from "../../index";
 import jwt_decode from "jwt-decode";
 import _cookie from "cookie";
+import fs from "fs";
 
 import {
   generateFakeUserData,
@@ -20,7 +21,7 @@ let userData = generateFakeUserData({
 let cookie = "";
 let imageId = "";
 
-describe("image new endpoint", () => {
+describe("image crud api", () => {
   let app: Express.Application;
 
   beforeAll(async () => {
@@ -50,16 +51,12 @@ describe("image new endpoint", () => {
   afterEach(async () => {});
 
   it("should create a image for a user", async () => {
-    const file = Buffer.from("dummy image data");
+    const file = fs.readFileSync("./cat.png");
+    const buffer = Buffer.from(file);
 
-    const newImageData = {
-      name: "test",
-      isPrivate: false,
-      data: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAA",
-    };
     const response = await request(app)
       .post("/api/image/new")
-      .field("isPrivate", newImageData.isPrivate)
+      .field("isPrivate", false)
       .set("cookie", cookie)
       .attach("file", file, "test.png");
 
@@ -72,6 +69,40 @@ describe("image new endpoint", () => {
     });
     imageId = response.body.image;
   });
+  it("should set a image to private", async () => {
+    const response = await request(app)
+      .put("/api/image/update")
+      .set("cookie", cookie)
+      .send({
+        imageId,
+        isPrivate: true,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Image set to private");
+  });
+  it("should get the actual public image by owner", async () => {
+
+  });
+
+  it("should not get the actual public image by others", async () => {
+
+  });
+  it("should set a image to public", async () => {
+    const response = await request(app)
+      .put("/api/image/update")
+      .set("cookie", cookie)
+      .send({
+        imageId,
+        isPrivate: false,
+      });
+
+    expect(response.status).toBe(200);
+    expect(response.body.message).toBe("Image set to public");
+  });
+  it("should not get the actual public image by anyone", async () => {
+
+  });
   it("should delete a image for a user", async () => {
     // delete the image in test 1 ,
     // TODO: make it depends on test1
@@ -81,10 +112,7 @@ describe("image new endpoint", () => {
       .send({
         imageId,
       });
-
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("Image deleted successfully");
   });
-  it("should set a image to private", async () => {});
-  it("should set a image to public", async () => {});
 });
