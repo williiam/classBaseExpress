@@ -6,18 +6,36 @@ import LoginController from "../controller/Api/Auth/Login";
 import LogoutController from "../controller/Api/Auth/Logout";
 import RegisterController from "../controller/Api/Auth/Register";
 import ImageController from "../controller/Api/Image/Image";
-
-import { parseUserAuthCookie } from "../middleware/Auth";
+import { parseUserAuthCookie, tryParseUserAuthCookie } from "../middleware/Auth";
+import fs from 'fs';
 
 import Locals from "../provider/Local";
 
 import HomeController from "../controller/Home";
 
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        // @ts-ignore
+        const userId = req.user?.id;
+        const dir = `uploads/${userId}/`;
+
+        // Create the directory if it does not exist
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+    
+        cb(null, dir);
+      },
+      filename: function(req, file, cb) {
+        cb(null, new Date().toISOString() + file.originalname);
+      }
+});
+
 const upload = multer({
-  dest: "uploads/",
+//   dest: "uploads/",
   limits: {
     fileSize: 1024 * 1024 * 10,
-    fields:2
+    fields: 2,
   },
   fileFilter(req, file, cb) {
     // 只接受三種圖片格式
@@ -26,6 +44,7 @@ const upload = multer({
     }
     cb(null, true);
   },
+  storage: storage
 });
 
 const router = Router();
@@ -42,9 +61,16 @@ router.post(
   upload.single("file"),
   ImageController.new
 );
-router.delete('/image/delete', ImageController.delete);
-router.post('/image/update', ImageController.update);
+router.delete("/image/delete", 
+parseUserAuthCookie,
+ImageController.delete);
+router.post("/image/update", 
+parseUserAuthCookie,
+ImageController.update);
 
-router.get('/image/list', ImageController.getList);
+router.get("/image/list", ImageController.getList);
+router.get("/image/:imageId",
+tryParseUserAuthCookie,
+ImageController.get);
 
 export default router;

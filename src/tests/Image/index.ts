@@ -30,10 +30,15 @@ export const createUserInDatabase = async (fakeUser) => {
 };
 
 export const cleanupDatabase = async(fakeUser) => {
-  const query = {
+  const imageQuery = {
+    text: "DELETE FROM image",
+    // values: [fakeUser.id],
+  };
+  const imageResult = await pool.query(imageQuery);
+  const userQuery = {
     text: "DELETE FROM users WHERE email = $1",
     values: [fakeUser.email],
   };
-  const result = await pool.query(query);
-  return result;
+  const userResult = await pool.query(userQuery);
+  return { imageResult, userResult };
 };

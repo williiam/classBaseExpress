@@ -3,6 +3,7 @@ import App from "../../index";
 import jwt_decode from "jwt-decode";
 import _cookie from "cookie";
 import fs from "fs";
+import path from "path";
 
 import {
   generateFakeUserData,
@@ -51,27 +52,26 @@ describe("image crud api", () => {
   afterEach(async () => {});
 
   it("should create a image for a user", async () => {
-    const file = fs.readFileSync("./cat.png");
-    const buffer = Buffer.from(file);
 
     const response = await request(app)
       .post("/api/image/new")
       .field("isPrivate", false)
       .set("cookie", cookie)
-      .attach("file", file, "test.png");
+      .attach("file", `${__dirname}/cat.png`);
 
     expect(response.status).toBe(200);
     // expect(response.body.message).toBe("Image uploaded successfully");
     expect(response.body).toMatchObject({
       error: false,
-      message: "Image uploaded successfully",
-      image: expect.any(Object),
+      message: "Image created",
+      // image: expect.any(Object),
     });
-    imageId = response.body.image;
+    const image = response.body.data;
+    imageId = image.id;
   });
   it("should set a image to private", async () => {
     const response = await request(app)
-      .put("/api/image/update")
+      .post("/api/image/update")
       .set("cookie", cookie)
       .send({
         imageId,
@@ -79,10 +79,19 @@ describe("image crud api", () => {
       });
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Image set to private");
+    expect(response.body.message).toBe("Image updated");
   });
   it("should get the actual public image by owner", async () => {
+    const response = await request(app)
+    .get(`/api/image/${imageId}`)
+    .set("cookie", cookie)
+      // .send({
+      //   imageId,
+      // });
 
+    expect(response.status).toBe(200);
+    
+    // expect to get the actual image file
   });
 
   it("should not get the actual public image by others", async () => {
@@ -90,7 +99,7 @@ describe("image crud api", () => {
   });
   it("should set a image to public", async () => {
     const response = await request(app)
-      .put("/api/image/update")
+      .post("/api/image/update")
       .set("cookie", cookie)
       .send({
         imageId,
@@ -98,7 +107,7 @@ describe("image crud api", () => {
       });
 
     expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Image set to public");
+    expect(response.body.message).toBe("Image updated");
   });
   it("should not get the actual public image by anyone", async () => {
 
