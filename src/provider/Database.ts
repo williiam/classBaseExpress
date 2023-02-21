@@ -6,13 +6,9 @@ import Log from "./Log";
 export class Database {
   public static pool: any;
 
-  private initTables(): void {
-    
-  }
+  private initTables(): void {}
 
-  private initFunctions(): void {
-
-  }
+  private initFunctions(): void {}
 
   // Initialize your database pool
   public static init(): any {
@@ -32,6 +28,7 @@ export class Database {
       port: postgresPort,
     });
     this.pool = pool;
+    console.log("\x1b[33m%s\x1b[0m", `Database connected`);
   }
 }
 

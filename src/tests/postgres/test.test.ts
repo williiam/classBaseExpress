@@ -31,4 +31,12 @@ describe("test db connected", () => {
     expect(result.rowCount).toBe(1);
     expect(result.rows[0]).toHaveProperty("now");
   });
+  // table should be initialized
+  it("should connect to db", async () => {
+    const result = await pool.query("SELECT NOW()");
+
+    // Check that query returned a valid result
+    expect(result.rowCount).toBe(1);
+    expect(result.rows[0]).toHaveProperty("now");
+  });
 });

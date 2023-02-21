@@ -5,23 +5,30 @@ services:
         restart: unless-stopped
         build: 
             context: .
-            dockerfile: dockerfile
+            dockerfile: server.dockerfile
             args:
                 - PORT= ${PORT}
-        network_mode: bridge
         ports:
             - 3001:3001
         env_file:
             - .env
+        environment:
+            - POSTGRES_HOST=db
         volumes:
             - ./logs:/root/.pm2/logs:Z
             - ./logs:/usr/src/logs:Z
             - ./uploads:/usr/src/uploads:Z
         depends_on:
             - db
+        # network_mode: bridge
+        networks:
+            - app-network
     db:
-        container_name: api-db
+        # container_name: api-db
         restart: unless-stopped
+        build: 
+            context: .
+            dockerfile: db.dockerfile
         image: postgres:13
         environment:
             - POSTGRES_USER=${POSTGRES_USER}
@@ -31,4 +38,10 @@ services:
             - ./db:/var/lib/postgresql/data:Z
         ports:
             - "5432:5432"
-        network_mode: bridge
+        # network_mode: bridge
+        networks:
+            - app-network
+
+networks:
+  app-network:
+    driver: bridge

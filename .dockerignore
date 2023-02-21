@@ -8,6 +8,6 @@ docker-compose*
 .git
 .gitignore
 .vscode
-/logs
+# /logs
 /node_modules
 /uploads

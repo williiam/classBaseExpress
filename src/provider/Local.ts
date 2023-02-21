@@ -61,7 +61,7 @@ class Locals {
       ? (parseInt(process.env.JWT_USER_SALT_ROUNDS) as number)
       : 10;
 
-	
+	  console.log(`POSTGRES_HOST is ${postgresHost}`);
 
     return {
       appSecret,

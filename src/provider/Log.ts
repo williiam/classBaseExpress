@@ -5,11 +5,11 @@ const Logger = bunyan.createLogger({
   streams: [
     {
       level: "info",
-      path: "./logs/info", // log ERROR and above to a file
+      path: "../logs/info", // log ERROR and above to a file
     },
     {
       level: "error",
-      path: "./logs/error", // log ERROR and above to a file,,
+      path: "../logs/error", // log ERROR and above to a file,,
       period: "1d",
       count: 7,
     },
