@@ -4,8 +4,8 @@
  * @author Faiz A. Farooqui <faiz@geekyants.com>
  */
 
-import * as path from 'path';
-import * as express from 'express';
+import path from 'path';
+import express from 'express';
 
 import Log from '../provider/Log';
 

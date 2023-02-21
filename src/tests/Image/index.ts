@@ -12,13 +12,13 @@ const defaultUserData = {
 Database.init();
 const pool = Database.pool;
 
-export const generateFakeUserData = (userData) => ({
+export const generateFakeUserData = (userData:any) => ({
   ...defaultUserData,
   ...userData,
 });
 
 // TODO: for testing, use another DB
-export const createUserInDatabase = async (fakeUser) => {
+export const createUserInDatabase = async (fakeUser:any) => {
   const hashPassword = await hash(fakeUser.password);
   const query = {
     text: "INSERT INTO users (email, password) VALUES ($1, $2)",
@@ -29,7 +29,7 @@ export const createUserInDatabase = async (fakeUser) => {
   return result;
 };
 
-export const cleanupDatabase = async(fakeUser) => {
+export const cleanupDatabase = async(fakeUser:any) => {
   const imageQuery = {
     text: "DELETE FROM image",
     // values: [fakeUser.id],

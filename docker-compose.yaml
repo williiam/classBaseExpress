@@ -1,28 +1,34 @@
 version: '3'
 services:
     server:
-        container_name: cnw-api-version-dev
+        container_name: api-server
         restart: unless-stopped
         build: 
             context: .
             dockerfile: dockerfile
-        args:
-            - PORT = 8080
+            args:
+                - PORT= ${PORT}
         network_mode: bridge
         ports:
-        - 8080:8080
+            - 3001:3001
         env_file:
-        - .env
+            - .env
         volumes:
-        - ./logs:/root/.pm2/logs:Z
-        # - ./logs:/home/.pm2/logs:Z
-        # - /Users/william/WORKSPACE/course-nccu-backend-2/logs:/usr/src/app/logs:Z
-        - ./logs:/usr/src/logs:Z
+            - ./logs:/root/.pm2/logs:Z
+            - ./logs:/usr/src/logs:Z
+            - ./uploads:/usr/src/uploads:Z
+        depends_on:
+            - db
     db:
-        image: postgres
+        container_name: api-db
+        restart: unless-stopped
+        image: postgres:13
         environment:
-        POSTGRES_USER: your_postgres_username
-        POSTGRES_PASSWORD: your_postgres_password
-        POSTGRES_DB: your_database_name
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DATABASE}
         volumes:
-        - ./data:/var/lib/postgresql/data
+            - ./db:/var/lib/postgresql/data:Z
+        ports:
+            - "5432:5432"
+        network_mode: bridge

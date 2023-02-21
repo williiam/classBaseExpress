@@ -4,7 +4,7 @@
  * @author Faiz A. Farooqui <faiz@geekyants.com>
  */
 
-import * as path from 'path';
+import path from 'path';
 import { Application } from 'express';
 
 import Log from '../provider/Log';

@@ -6,6 +6,14 @@ import Log from "./Log";
 export class Database {
   public static pool: any;
 
+  private initTables(): void {
+    
+  }
+
+  private initFunctions(): void {
+
+  }
+
   // Initialize your database pool
   public static init(): any {
     const {

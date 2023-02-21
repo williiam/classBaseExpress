@@ -22,6 +22,10 @@ let userData = generateFakeUserData({
 let cookie = "";
 let imageId = "";
 
+const filePath = path.join(__dirname, 'cat.png');
+const fileContents = fs.readFileSync(filePath, 'utf8');
+const file = Buffer.from(fileContents);
+
 describe("image crud api", () => {
   let app: Express.Application;
 
@@ -37,7 +41,7 @@ describe("image crud api", () => {
       message: "Registration successful",
       accessToken: expect.any(String),
     });
-    const decoded = jwt_decode(response.body.accessToken);
+    const decoded = jwt_decode<any>(response.body.accessToken);
     userData = {
       ...userData,
       ...decoded,
@@ -85,17 +89,19 @@ describe("image crud api", () => {
     const response = await request(app)
     .get(`/api/image/${imageId}`)
     .set("cookie", cookie)
-      // .send({
-      //   imageId,
-      // });
 
     expect(response.status).toBe(200);
-    
     // expect to get the actual image file
+    // @ts-ignore
+    expect(response._body).toEqual(file);
   });
 
   it("should not get the actual public image by others", async () => {
+    const response = await request(app)
+    .get(`/api/image/${imageId}`)
+    // .set("cookie", cookie)
 
+    expect(response.status).toBe(403);
   });
   it("should set a image to public", async () => {
     const response = await request(app)
@@ -106,11 +112,20 @@ describe("image crud api", () => {
         isPrivate: false,
       });
 
-    expect(response.status).toBe(200);
-    expect(response.body.message).toBe("Image updated");
+      expect(response.status).toBe(200);
+      // expect to get the actual image file
+    // @ts-ignore
+      expect(response._body).toEqual(file);
   });
-  it("should not get the actual public image by anyone", async () => {
+  it("should get the actual public image by anyone", async () => {
+    const response = await request(app)
+    .get(`/api/image/${imageId}`)
+    .set("cookie", cookie)
 
+    expect(response.status).toBe(200);
+    // expect to get the actual image file
+    // @ts-ignore
+    expect(response._body).toEqual(file);
   });
   it("should delete a image for a user", async () => {
     // delete the image in test 1 ,

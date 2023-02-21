@@ -17,19 +17,14 @@ Complete the challenege and send us the repoistory for review.
 - Try to use Docker
 - Any database of choice
 
-## TODO
+## SET UP
 
-pm2
-圖片要可設成 private:
-可以用 cloudfunction?
+```bash
+docker compose up
+```
 
-s3 可以打 cnw 的
+## TEST
 
-seperate test enviroment db
-
-TODO: 
-private and public
-DOCKER
-
-pro and dev
-    DB SPLIT
+```bash
+npm run test
+```

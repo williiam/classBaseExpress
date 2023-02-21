@@ -194,13 +194,14 @@ class Image {
       const selectImage = selectResult.rows[0];
 
       if (selectImage.isPrivate && !!user && user.id !== selectImage.userId) {
-        return res.status(400).json({
+        return res.status(403).json({
           message: "unauthorized",
         });
       }
 
-      const actualPath = path.join(__dirname, `../../${selectImage.path}`)
+      const actualPath = path.join(__dirname, `../../../../${selectImage.path}`)
 
+      res.set("Content-Type", getContentType(actualPath));
       res.sendFile(actualPath);
       return;
     } catch (err) {

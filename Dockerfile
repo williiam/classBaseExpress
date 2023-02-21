@@ -1,10 +1,8 @@
-FROM node:10.5.0
+FROM node
 
 WORKDIR /usr/src/app
 
 RUN npm install -g typescript
-
-RUN npm install -g nodemon
 
 COPY package*.json ./
 
@@ -12,10 +10,9 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 4040 8080
+EXPOSE 3001 3001
 
-#Build to project
 RUN npm run build
 
 # Run node server
-CMD npm run start
+CMD npm start
