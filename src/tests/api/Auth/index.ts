@@ -1,5 +1,5 @@
-import { hash } from "../../util/crypt";
-import { Database } from "../../provider/Database";
+import { hash } from "../../../util/crypt";
+import { Database } from "../../../provider/Database";
 
 const defaultUserData = {
   email: "william@gmail.com",
@@ -30,15 +30,10 @@ export const createUserInDatabase = async (fakeUser:any) => {
 };
 
 export const cleanupDatabase = async(fakeUser:any) => {
-  const imageQuery = {
-    text: "DELETE FROM image",
-    // values: [fakeUser.id],
-  };
-  const imageResult = await pool.query(imageQuery);
-  const userQuery = {
+  const query = {
     text: "DELETE FROM users WHERE email = $1",
     values: [fakeUser.email],
   };
-  const userResult = await pool.query(userQuery);
-  return { imageResult, userResult };
+  const result = await pool.query(query);
+  return result;
 };

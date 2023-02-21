@@ -1,6 +1,6 @@
 import request from "supertest";
-import App from "../../index";
-import { generateFakeUserData,createUserInDatabase,cleanupDatabase } from "./index";
+import App from "../../../index";
+import { generateFakeUserData,createUserInDatabase,cleanupDatabase } from "../index";
 
 jest.setTimeout(30000);
 

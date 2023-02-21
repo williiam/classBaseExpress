@@ -19,6 +19,15 @@ Complete the challenege and send us the repoistory for review.
 
 ## SET UP
 
+### local
+
+```bash
+npm install
+npm run dev
+```
+
+### docker
+
 ```bash
 docker compose up
 ```

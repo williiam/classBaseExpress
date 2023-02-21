@@ -183,7 +183,7 @@ class Image {
       const { imageId } = params;
 
       const selectResult = await Database.pool.query(
-        "SELECT id, name, is_private, path, created_at FROM image WHERE id = $1",
+        "SELECT id, name, is_private, path, user_id, created_at FROM image WHERE id = $1",
         [imageId]
       );
 
@@ -192,8 +192,10 @@ class Image {
       }
 
       const selectImage = selectResult.rows[0];
-
-      if (selectImage.isPrivate && !!user && user.id !== selectImage.userId) {
+      const incomeUserId = user?.id
+      const dbUserId=selectImage.user_id;
+      const test = !( incomeUserId === dbUserId)
+      if (selectImage.is_private && !( incomeUserId === dbUserId)) {
         return res.status(403).json({
           message: "unauthorized",
         });

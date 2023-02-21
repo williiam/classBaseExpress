@@ -66,13 +66,11 @@ export const tryParseUserAuthCookie: RequestHandler<
       }
     );
     // @ts-ignore
-    if (user instanceof Error) {
-      next();
+    if (!(user instanceof Error)) {
+      // @ts-ignore
+      req.user = user;
     }
-    // @ts-ignore
-    req.user = user;
-    next();
-    return;
   }
   next();
+  return;
 };
