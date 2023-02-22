@@ -91,7 +91,7 @@ class Login {
   };
 
   // check jwt middleware
-  public static checkJwt(req: IRequest, res: IResponse, next: INext): any {
+  public static checkJwt: RequestHandler<IRequest, Partial<IResponse>,INext> = (_req, res, next) => {
     Log.info("Checking JWT");
     next();
   }

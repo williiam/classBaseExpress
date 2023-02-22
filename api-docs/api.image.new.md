@@ -1,25 +1,31 @@
-Endpoint: /api/image/new
+## /api/image/new
 
-Method: POST
+- Method: `POST`
+- Header: `Cookie : the jwt token sent by server after success authenticate`
+- Body:
 
-Description: This endpoint is used to create an image for a user.
+```json
+{
+  "isPrivate": true,
+  "file": "Image created"
+}
+```
 
-Request 
-    Headers:
-    {
-        Cookie : The user authentication cookie. // (required)
-    }
-    Body:
-    {
-        isPrivate: bool // (required, boolean): A boolean value that determines whether the image is private or not.
-        file: the attach file 
-    }
+- Param: `None`
+- Success Response:
 
-Response:
-    Body:
-    {
-        error (boolean): A boolean value indicating whether an error occurred or not.
-        message (string): A message describing the response.
-        data (object): An object containing the created image details.
-    }
+```json
+{
+  "error": false,
+  "message": ""
+}
+```
 
+- Error Response:
+
+```json
+{
+  "success": true,
+  "message": "Some error occurs."
+}
+```

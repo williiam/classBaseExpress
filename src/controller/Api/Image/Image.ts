@@ -3,6 +3,7 @@ import { check, validationResult } from "express-validator";
 import { IRequest, IResponse } from "../../../interface/vendors";
 import { Database } from "../../../provider/Database";
 import path from 'path';
+import fs from 'fs';
 class Image {
   public static new: RequestHandler<IRequest, Partial<IResponse>> = async (
     req,
@@ -32,15 +33,12 @@ class Image {
 
       await client.query("BEGIN");
 
-      // V1 存local TODO: access control
-
       // 存圖片metadata
       const insertResult = await client.query(
         "INSERT INTO image (name, is_private, user_id, path, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *",
         [name, isPrivate, user.id, file.path, new Date()]
       );
 
-      // FIXME
       await client.query("COMMIT");
 
       if (insertResult.rowCount === 1) {
@@ -77,11 +75,36 @@ class Image {
 
       await client.query("BEGIN");
 
-      const deleteResult = await client.query(
-        "DELETE FROM image WHERE id = $1 AND user_id = $2",
+
+      const selectResult = await client.query(
+        "SELECT * FROM image WHERE id = $1 AND user_id = $2",
         [imageId, user.id]
       );
 
+      if (selectResult.rowCount === 0) {
+        return res.status(400).json({
+          error: true,
+          message: "Image not found",
+        });
+      }
+
+      const image = selectResult.rows[0];
+
+      //delete the image file in the path
+      const filePath = path.join(__dirname, '../../../..', image.path);
+      const deleteFileResult = fs.promises.unlink(filePath);
+      if (!deleteFileResult) {
+        return res.status(400).json({
+          error: true,
+          message: "Image file not found",
+        });
+      }
+
+      const deleteResult = await client.query(
+        "DELETE FROM image WHERE id = $1 AND user_id = $2",
+        [imageId, user.id]
+        );
+      
       await client.query("COMMIT");
 
       if (deleteResult.rowCount === 1) {
@@ -139,30 +162,6 @@ class Image {
       throw err;
     } finally {
       client.release();
-    }
-  };
-
-  public static getList: RequestHandler<IRequest, Partial<IResponse>> = async (
-    req,
-    res
-  ) => {
-    try {
-      // @ts-ignore
-      const { user } = req;
-
-      const selectResult = await Database.pool.query(
-        "SELECT id, name, is_private, path, created_at FROM image WHERE user_id = $1",
-        [user.id]
-      );
-
-      return res.status(200).json({
-        error: false,
-        message: "Image list",
-        data: selectResult.rows,
-      });
-    } catch (err) {
-      console.error(err);
-      throw err;
     }
   };
 

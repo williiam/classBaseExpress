@@ -50,16 +50,10 @@ describe("Registration endpoint", () => {
   });
 
   it("should return an error if the email is already registered", async () => {
-    // first create a fake user in the database
-
     const cleanupResultBefore = await cleanupDatabase(fakeUser);
     const createResult = await createUserInDatabase(fakeUser);
     const response = await request(app).post("/api/auth/register").send(fakeUser);
     expect(response.status).toBe(400);
-    // expect(response.body).toMatchObject({
-    //   error: true,
-    //   message: "Email already registered",
-    // });
     const cleanupResult = await cleanupDatabase(fakeUser);
     console.log(cleanupResult);
   });
@@ -73,9 +67,6 @@ describe("Registration endpoint", () => {
     const response = await request(app).post("/api/auth/register").send(userData);
 
     expect(response.status).toBe(400);
-    // expect(response.body).toMatchObject({
-    //   error: true,
-    // });
   });
 
   it("should return an error if the confirmPassword is different from password", async () => {
@@ -87,8 +78,5 @@ describe("Registration endpoint", () => {
     const response = await request(app).post("/api/auth/register").send(userData);
 
     expect(response.status).toBe(400);
-    // expect(response.body).toMatchObject({
-    //   error: true,
-    // });
   });
 });

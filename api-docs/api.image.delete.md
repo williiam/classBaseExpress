@@ -1,21 +1,30 @@
-Endpoint: /api/image/delete
+## /api/image/delete
 
-Method: DELETE
+- Method: `POST`
+- Header: `Cookie : the jwt token sent by server after success authenticate`
+- Body:
 
-Description: This endpoint is used to delete an image of a user.
+```json
+{
+  "imageId": "123"
+}
+```
 
-Request 
-  Headers:
-  {
-    cookie: The cookie containing the user session information.
-  }
-  Body:
-  {
-    imageId: string // The id of the image to delete
-  }
+- Param: `None`
+- Success Response:
 
-Response 
-  Body:
-  {
-    message: string // The status message of the request
-  }
+```json
+{
+  "error": false,
+  "message": "Image deleted"
+}
+```
+
+- Error Response:
+
+```json
+{
+  "success": true,
+  "message": "Some error occurs."
+}
+```

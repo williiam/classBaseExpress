@@ -29,7 +29,7 @@ and you can run test(npm run test) in the container
 the server log will be store in ./logs
 the image file will be store in ./uploads
 
-### THE API DOCS IS IN /api-docs
+### THE API DOCS IS IN api.md or /api-docs 
 
 ## HOW TO SET UP
 

@@ -1,36 +1,31 @@
-Endpoint: /api/image/update
+## /api/image/update
 
-Method: POST
+- Method: `POST`
+- Header: `Cookie : the jwt token sent by server after success authenticate`
+- Body:
 
-Updates the privacy status of an existing image.
+```json
+{
+  "isPrivate": true,
+  "imageId": "123"
+}
+```
 
-Auth Required: Yes
+- Param: `None`
+- Success Response:
 
-Request 
-    Headers:
-    {
-        Cookie : The user authentication cookie. // (required)
-    }
-    Body:
-    {
-        imageId: The ID of the image to be updated.
-        isPrivate: Boolean indicating whether the image should be private (true) or public (false).
-    }
+```json
+{
+  "error": false,
+  "message": "Image updated"
+}
+```
 
-Response:
-    Body:
-    {
-        error (boolean): A boolean value indicating whether an error occurred or not.
-        message (string): A message describing the response.
-        message: "Image updated"
-    }
+- Error Response:
 
-Success:
-Status Code: 200
-Response Body:
-message: "Image updated"
-Failure:
-Status Code: 400
-Response Body:
-error: true
-message: Error message describing the cause of the failure.
+```json
+{
+  "success": true,
+  "message": "Some error occurs."
+}
+```

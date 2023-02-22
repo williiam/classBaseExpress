@@ -17,7 +17,6 @@ class Views {
 		_express.set('view engine', 'pug');
 		_express.set('view options', { pretty: true });
 		_express.set('views', path.join(__dirname, '../views'));
-		console.log( path.join(__dirname, '../views'))
 		_express.locals.pretty = true;
 
 		return _express;

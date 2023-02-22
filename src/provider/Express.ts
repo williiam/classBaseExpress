@@ -10,7 +10,7 @@ import cors from "cors";
 import Locals from "./Local";
 import Logger from "./Log";
 import Routes from "./Routes";
-import Bootstrap from "../middleware/Kernel";
+import Bootstrap from "../middleware";
 import ExceptionHandler from "../exception/Handler";
 
 class Express {

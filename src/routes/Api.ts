@@ -1,5 +1,4 @@
 import { Router } from "express";
-import expressJwt from "express-jwt";
 import multer from "multer";
 
 import LoginController from "../controller/Api/Auth/Login";
@@ -68,7 +67,6 @@ router.post("/image/update",
 parseUserAuthCookie,
 ImageController.update);
 
-router.get("/image/list", ImageController.getList);
 router.get("/image/:imageId",
 tryParseUserAuthCookie,
 ImageController.get);

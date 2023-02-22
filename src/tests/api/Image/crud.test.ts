@@ -22,10 +22,6 @@ let userData = generateFakeUserData({
 let cookie = "";
 let imageId = "";
 
-const filePath = path.join(__dirname, 'cat.png');
-const fileContents = fs.readFileSync(filePath, 'utf8');
-const file = Buffer.from(fileContents);
-
 describe("image crud api", () => {
   let app: Express.Application;
 

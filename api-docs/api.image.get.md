@@ -1,22 +1,30 @@
-API Documentation: /api/image/get:imageId
-get the privacy status of an existing image.
+## /api/image/get
 
-Request
-Endpoint: /api/image/get
-Method: POST
-Auth Required: Yes
-Request Body:
-imageId: The ID of the image to be get.
-Response
-Success:
-Status Code: 200
-Response Body:
+- Method: `GET`
+- Header: `Authorization: Bearer {jwt}`
+- Body:
+
+```json
 {
-    _body: the actual image file
+    "_body": ... // the actual image file
 }
-Failure:
-Status Code: 400
-Response Body:
-error: true
-message: Error message describing the cause of the failure.
+```
 
+- Param: `None`
+- Success Response:
+
+```json
+{
+  "success": false,
+  "message": ""
+}
+```
+
+- Error Response:
+
+```json
+{
+  "success": true,
+  "message": "Some error occurs."
+}
+```
