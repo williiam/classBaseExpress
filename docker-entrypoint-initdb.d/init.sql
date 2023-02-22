@@ -2,20 +2,13 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   email TEXT NOT NULL,
   password TEXT NOT NULL,
-  name TEXT NOT NULL,
+  name TEXT,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
 
 -- Add a unique constraint on the email column
 ALTER TABLE "users" ADD CONSTRAINT unique_email UNIQUE (email);
-
-
--- Define a trigger to update the updated_at column whenever a row is updated
-CREATE TRIGGER update_user_updated_at
-  BEFORE UPDATE ON "users"
-  FOR EACH ROW
-  EXECUTE FUNCTION update_user_updated_at();
 
 -- Define a function to update the updated_at column to the current timestamp
 CREATE OR REPLACE FUNCTION update_user_updated_at()
@@ -25,6 +18,12 @@ CREATE OR REPLACE FUNCTION update_user_updated_at()
     RETURN NEW;
   END;
 $$ LANGUAGE plpgsql;
+
+-- Define a trigger to update the updated_at column whenever a row is updated
+CREATE TRIGGER update_user_updated_at
+  BEFORE UPDATE ON "users"
+  FOR EACH ROW
+  EXECUTE FUNCTION update_user_updated_at();
 
 -- Create the "image" table
 CREATE TABLE image (

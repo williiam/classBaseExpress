@@ -1,8 +1,18 @@
 import request from "supertest";
 import App from "../../../index";
-import { generateFakeUserData,createUserInDatabase,cleanupDatabase } from "../index";
+import {
+  generateFakeUserData,
+  createUserInDatabase,
+  cleanupDatabase,
+} from "../index";
 
 jest.setTimeout(30000);
+
+// first create a fake user in the database
+const fakeUser = generateFakeUserData({
+  email: "fake@gmail.com",
+  password: "password",
+});
 
 describe("Login endpoint", () => {
   let app: Express.Application;
@@ -11,13 +21,12 @@ describe("Login endpoint", () => {
     app = App.getExpressApp();
   });
   afterAll(async () => {
-    // kill the app
+    const cleanupResult = await cleanupDatabase(fakeUser);
+    console.log(cleanupResult);
   });
   afterEach(async () => {});
 
   it("should login a user", async () => {
-    // first create a fake user in the database
-    const fakeUser = generateFakeUserData({ email: "fake@gmail.com",password:"password" });
     const cleanUpResult = await cleanupDatabase(fakeUser);
     const createResult = await createUserInDatabase(fakeUser);
     const response = await request(app).post("/api/auth/login").send(fakeUser);
@@ -31,11 +40,6 @@ describe("Login endpoint", () => {
   });
 
   it("should return an error if the password incorrect", async () => {
-    // first create a fake user in the database
-    const fakeUser = generateFakeUserData({
-      email: "fake@gmail.com",
-      password: "password",
-    });
     const userData = await generateFakeUserData(fakeUser);
     const response = await request(app)
       .post("/api/auth/login")

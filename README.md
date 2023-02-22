@@ -17,7 +17,21 @@ Complete the challenege and send us the repoistory for review.
 - Try to use Docker
 - Any database of choice
 
-## SET UP
+## SOLUTION
+
+use cookie to store user jwt sent from server after login or register success
+
+store image file on server as local file and store permission(include private permission) in database(postgres), use cookie to auth request getting the image file
+
+the server can be build and run in docker with one command
+and you can run test(npm run test) in the container
+
+the server log will be store in ./logs
+the image file will be store in ./uploads
+
+### THE API DOCS IS IN /api-docs
+
+## HOW TO SET UP
 
 ### local
 

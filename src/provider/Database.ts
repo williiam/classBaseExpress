@@ -18,17 +18,22 @@ export class Database {
       postgresDatabase,
       postgresPassword,
       postgresPort,
-    } = Locals.config();
+    } = Locals._config;
 
     const pool = new Pool({
       user: postgresUser,
       host: postgresHost,
       database: postgresDatabase,
       password: postgresPassword,
-      port: postgresPort,
+      port: parseInt(postgresPort || "5432"),
     });
     this.pool = pool;
-    console.log("\x1b[33m%s\x1b[0m", `Database connected`);
+
+    // check pool is connected
+    if (pool) {
+      Log.info(`Database connected`);
+      console.log("\x1b[33m%s\x1b[0m", `Database connected`);
+    }
   }
 }
 

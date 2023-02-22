@@ -8,6 +8,7 @@ import express from "express";
 import cors from "cors";
 
 import Locals from "./Local";
+import Logger from "./Log";
 import Routes from "./Routes";
 import Bootstrap from "../middleware/Kernel";
 import ExceptionHandler from "../exception/Handler";
@@ -68,6 +69,8 @@ class Express {
     this.express.use(ExceptionHandler.clientErrorHandler);
     this.express.use(ExceptionHandler.errorHandler);
     this.express = ExceptionHandler.notFoundHandler(this.express);
+
+    Logger.init();
 
     // Start the server on the specified port
     this.express

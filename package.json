@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node-esm src/index.ts",
     "dev": "nodemon src/index.ts",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles",
     "pm2": "NODE_ENV=production pm2 start src/index.ts --watch",
     "build": "tsc -p ."
   },

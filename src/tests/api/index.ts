@@ -17,7 +17,6 @@ export const generateFakeUserData = (userData:any) => ({
   ...userData,
 });
 
-// TODO: for testing, use another DB
 export const createUserInDatabase = async (fakeUser:any) => {
   const hashPassword = await hash(fakeUser.password);
   const query = {
